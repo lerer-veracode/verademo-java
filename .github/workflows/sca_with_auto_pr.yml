@@ -34,7 +34,7 @@ jobs:
         # See: https://docs.github.com/en/github/authenticating-to-github/keeping-your-account-and-data-secure/creating-a-personal-access-token
         SRCCLR_SCM_TOKEN: ${{ secrets.SCM_GITHUB }} 
         # Generate a pull request when libraries contain calls to vulnerable methods
-        SRCCLR_PR_ON: low
+        SRCCLR_PR_ON: Low
         # Do not include potentially build-breaking upgrades in a pull request
         SRCCLR_NO_BREAKING_UPDATES: true
         # Generate a pull request if there are no open pull requests with the exact same changes
