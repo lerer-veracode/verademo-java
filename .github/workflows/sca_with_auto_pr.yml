@@ -39,8 +39,8 @@ jobs:
         SRCCLR_NO_BREAKING_UPDATES: true
         # Generate a pull request if there are no open pull requests with the exact same changes
         SRCCLR_IGNORE_CLOSED_PRS: true
-        SRCCLR_SCM_URL: https://github.com/$GITHUB_REPOSITORY
-        EXTRA_ARGS: '--update-advisor --pull-request --unmatched'
+        SRCCLR_SCM_URL: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY
+        EXTRA_ARGS: '--recursive --update-advisor --pull-request --unmatched'
       run: |
         git config --global user.email "${{ secrets.USER_EMAIL }}"
         git config --global user.name "${{ secrets.USER_NAME }}"
