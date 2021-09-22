@@ -39,7 +39,7 @@ jobs:
           echo ${{steps.check-vulnerabilities.outputs.pass}}
           echo ${{steps.check-vulnerabilities.outputs.VULN_NUM}}
       - name: SCA Pass
-        if: ${{ steps.check-vulnerabilities.outputs.pass }} == "1"
+        if: ${{ steps.check-vulnerabilities.outputs.pass == 1 }}
         env:
           VULN_NUM: ${{steps.check-vulnerabilities.outputs.VULN_NUM}}
         uses: actions/github-script@v3
