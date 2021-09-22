@@ -22,12 +22,12 @@ jobs:
       - name: set content
         run: |
           git version
-          echo 'High Risk Vulnerabilities                      5\n' > veracode-sca-results.txt
+          echo 'High Risk Vulnerabilities                      0\n' > veracode-sca-results.txt
       - name: check-vulnerabilities
         id: check-vulnerabilities
         run: |
           cat veracode-sca-results.txt
-          TEMP_VULN_EXISTS=$(grep 'Risk Vulnerabilities' veracode-sca-results.txt | awk '{sums += $4} END { test = (sums>=2); print test}')
+          TEMP_VULN_EXISTS=$(grep 'Risk Vulnerabilities' veracode-sca-results.txt | awk '{sums += $4} END { test = (sums>0); print test}')
           TEMP_VULN_SUM=$(grep 'Risk Vulnerabilities' veracode-sca-results.txt | awk '{sums += $4} END { print sums}')
           echo $TEMP_VULN_EXISTS
           echo $TEMP_VULN_SUM
