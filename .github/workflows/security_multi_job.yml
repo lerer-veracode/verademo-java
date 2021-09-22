@@ -4,8 +4,7 @@ name: SCA on change in components
 on:
   # Triggers the workflow on push where package-lock.json modifies or pull request events
   push:
-    paths:
-      - 'package-lock.json'
+    branches: [test*]
   pull_request:
   
   # Allows you to run this workflow manually from the Actions tab
@@ -13,18 +12,50 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
+  Build:
+    runs-on: [self-hosted, generic]
+    steps:
+      - name: Check out repo 
+        uses: actions/checkout@v2
+      - name: Set up JDK 1.8
+        uses: actions/setup-java@v1
+        with:
+          java-version: 1.8
+      - name: Build with Maven
+        run: mvn -B package --file pom.xml
+        
+  generate-sandbox-name:
+    runs-on: [ self-hosted, generic ]
+    outputs:
+      sandbox-name: ${{ steps.set-sandbox-name.outputs.sandbox-name }}
+    steps:
+      # Creates the sandbox(logical release descriptive status of current branch)
+      - id: set-sandbox-name
+        name: set-sandbox-name
+        run: |
+          echo ${{ github.head_ref }}
+          branchName="${{ github.head_ref }}"
+          if [[ -z "$branchName" ]]; then
+            branchName="${{ github.ref }}"
+          fi
+          echo "::set-output name=sandbox-name::$branchName"
+        
   # The workflow consist of a single job to quickly scan dependencies
   SCA_Scan:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
-
+    needs: [ Build, generate-sandbox-name ]
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - name: Check out repo 
-        uses: actions/checkout@v2
-
       # run quick scan on the project
       - name: SCA Scan
         env: 
           SRCCLR_API_TOKEN: ${{ secrets.SRCCLR_API_TOKEN }}
-        run: curl -sSL https://download.sourceclear.com/ci.sh | sh -s scan --quick
+        run: |
+          curl -sSL https://download.sourceclear.com/ci.sh | sh -s scan --quick | tee veracode-sca-results.txt
+          TEMP_VULN_EXISTS=$(grep 'Risk Vulnerabilities' veracode-sca-results.txt | awk '{sums += $4} END { test = (sums>=0); print test}')
+      - name: SCA Pass
+        if: ${{ TEMP_VULN_EXISTS }} == 1
+        uses: actions/github-script@v3
+        with:
+          script: |
+              core.setFailed('Found Risk Vulnerabilities in your open source libraries');
