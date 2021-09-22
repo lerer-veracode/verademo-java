@@ -1,10 +1,10 @@
-name: SCA on change in components
+name: Secure with multiple separate jobs
 
 # Controls when the workflow will run
 on:
   # Triggers the workflow on push where package-lock.json modifies or pull request events
-  #push:
-  #  branches: [test*]
+  push:
+    branches: [test*]
   pull_request:
   
   # Allows you to run this workflow manually from the Actions tab
@@ -85,7 +85,7 @@ jobs:
         id: check-vulnerabilities
         run: |
           cat veracode-sca-results.txt
-          TEMP_VULN_EXISTS=$(grep 'Risk Vulnerabilities' veracode-sca-results.txt | awk '{sums += $4} END { test = (sums>=0); print test}')
+          TEMP_VULN_EXISTS=$(grep 'Risk Vulnerabilities' veracode-sca-results.txt | awk '{sums += $4} END { test = (sums>0); print test}')
           TEMP_VULN_SUM=$(grep 'Risk Vulnerabilities' veracode-sca-results.txt | awk '{sums += $4} END { print sums}')
           echo ::set-output name=fail::$TEMP_VULN_EXISTS
           echo ::set-output name=sums::$TEMP_VULN_SUM
