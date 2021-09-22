@@ -53,12 +53,16 @@ jobs:
           SRCCLR_API_TOKEN: ${{ secrets.SRCCLR_API_TOKEN }}
         run: |
           curl -sSL https://download.sourceclear.com/ci.sh | sh -s scan --recursive | tee veracode-sca-results.txt
+      - name: check-vulnerabilities
+        run: |
           cat veracode-sca-results.txt
           TEMP_VULN_EXISTS=$(grep 'Risk Vulnerabilities' veracode-sca-results.txt | awk '{sums += $4} END { test = (sums>=0); print test}')
+          TEMP_VULN_SUM=$(grep 'Risk Vulnerabilities' veracode-sca-results.txt | awk '{sums += $4} END { print sums}')
           echo ::set-output name=pass::$TEMP_VULN_EXISTS
+          echo ::set-output name=sums::$TEMP_VULN_SUM
       - name: SCA Pass
-        if: ${{ steps.SCA-Scan-and-measure.outputs.pass }} == 1
+        if: ${{ steps.check-vulnerabilities.outputs.pass }} == 1
         uses: actions/github-script@v3
         with:
           script: |
-              core.setFailed('Found Risk Vulnerabilities in your open source libraries');
+              core.setFailed('Found ${{steps.check-vulnerabilities.outputs.}} Risk Vulnerabilities in your open source libraries');
