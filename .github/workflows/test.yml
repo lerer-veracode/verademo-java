@@ -28,6 +28,9 @@ jobs:
           cat veracode-sca-results.txt
           TEMP_VULN_EXISTS=$(grep 'Risk Vulnerabilities' veracode-sca-results.txt | awk '{sums += $4} END { test = (sums>=50); print test}')
           TEMP_VULN_SUM=$(grep 'Risk Vulnerabilities' veracode-sca-results.txt | awk '{sums += $4} END { print sums}')
+          echo $TEMP_VULN_EXISTS
+          echo $TEMP_VULN_SUM
+          echo TEMP_VULN_EXISTS
           echo ::set-output name=pass::$TEMP_VULN_EXISTS
           echo ::set-output name=VULN_NUM::$TEMP_VULN_SUM
       - name: echo
