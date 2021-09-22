@@ -52,7 +52,7 @@ jobs:
         env: 
           SRCCLR_API_TOKEN: ${{ secrets.SRCCLR_API_TOKEN }}
         run: |
-          curl -sSL https://download.sourceclear.com/ci.sh | sh -s scan --recursive | tee veracode-sca-results.txt
+          curl -sSL https://download.sourceclear.com/ci.sh | sh -s scan --recursive > veracode-sca-results.txt
       - name: check-vulnerabilities
         run: |
           cat veracode-sca-results.txt
