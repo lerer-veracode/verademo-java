@@ -24,6 +24,7 @@ jobs:
           git version
           echo 'High Risk Vulnerabilities                      5\n' > veracode-sca-results.txt
       - name: check-vulnerabilities
+        id: check-vulnerabilities
         run: |
           cat veracode-sca-results.txt
           TEMP_VULN_EXISTS=$(grep 'Risk Vulnerabilities' veracode-sca-results.txt | awk '{sums += $4} END { test = (sums>=50); print test}')
