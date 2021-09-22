@@ -31,8 +31,8 @@ jobs:
           echo $TEMP_VULN_EXISTS
           echo $TEMP_VULN_SUM
           echo TEMP_VULN_EXISTS
-          echo ::set-output name=pass::$TEMP_VULN_EXISTS
-          echo ::set-output name=VULN_NUM::$TEMP_VULN_SUM
+          echo '::set-output name=pass::$TEMP_VULN_EXISTS'
+          echo '::set-output name=VULN_NUM::$TEMP_VULN_SUM'
       - name: echo
         run: |
           echo ${{steps.check-vulnerabilities.outputs.pass}}
