@@ -52,7 +52,8 @@ jobs:
         env: 
           SRCCLR_API_TOKEN: ${{ secrets.SRCCLR_API_TOKEN }}
         run: |
-          curl -sSL https://download.sourceclear.com/ci.sh | sh -s scan --quick --recursive | tee veracode-sca-results.txt
+          curl -sSL https://download.sourceclear.com/ci.sh | sh -s scan --recursive | tee veracode-sca-results.txt
+          cat veracode-sca-results.txt
           TEMP_VULN_EXISTS=$(grep 'Risk Vulnerabilities' veracode-sca-results.txt | awk '{sums += $4} END { test = (sums>=0); print test}')
           echo ::set-output name=pass::$TEMP_VULN_EXISTS
       - name: SCA Pass
