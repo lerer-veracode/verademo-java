@@ -34,8 +34,7 @@ jobs:
           unzip veracode.zip
       - name: Run Pipeline Scanner
         run: |
-          EXIT_CODE = $(java -jar ./dls/pipeline-scan.jar --veracode_api_id "${{secrets.VERACODE_ID}}" --veracode_api_key "${{secrets.VERACODE_KEY}}" --file "app/target/verademo.war" -fs "Very High, High" -jo true -so true --project_url https://www.github.com/$GITHUB_REPOSITORY -p $GITHUB_REPOSITORY -r $GITHUB_REF -bf "baseline.json")
-          echo $EXIT_CODE
+          java -jar ./dls/pipeline-scan.jar --veracode_api_id "${{secrets.VERACODE_ID}}" --veracode_api_key "${{secrets.VERACODE_KEY}}" --file "app/target/verademo.war" -fs "Very High, High" -jo true -so true --project_url https://www.github.com/$GITHUB_REPOSITORY -p $GITHUB_REPOSITORY -r $GITHUB_REF -bf "baseline.json"
         continue-on-error: true
       - name: list files
         run: |
