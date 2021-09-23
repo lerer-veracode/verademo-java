@@ -33,19 +33,16 @@ jobs:
           curl https://downloads.veracode.com/securityscan/pipeline-scan-LATEST.zip -o veracode.zip
           unzip veracode.zip
       - name: Run Pipeline Scanner
-        run: java -jar ./dls/pipeline-scan.jar --veracode_api_id "${{secrets.VERACODE_ID}}" --veracode_api_key "${{secrets.VERACODE_KEY}}" --file "app/target/verademo.war" -fs "Very High, High" -jo true -so true --project_url https://www.github.com/$GITHUB_REPOSITORY -p $GITHUB_REPOSITORY -r $GITHUB_REF
+        run: |
+          EXIT_CODE = $(java -jar ./dls/pipeline-scan.jar --veracode_api_id "${{secrets.VERACODE_ID}}" --veracode_api_key "${{secrets.VERACODE_KEY}}" --file "app/target/verademo.war" -fs "Very High, High" -jo true -so true --project_url https://www.github.com/$GITHUB_REPOSITORY -p $GITHUB_REPOSITORY -r $GITHUB_REF -bf "baseline.json")
+          echo $EXIT_CODE
         continue-on-error: true
       - name: list files
         run: |
-          ls -la
           yes | cp filtered_results.json baseline.json
-          ls -la
           git config user.email "${{secrets.USER_EMAIL}}"
           git config user.name "${{secrets.USER_NAME}}"
           git add "baseline.json"
           git commit -m "Updates baseline"
           # git push origin ${{ github.head_ref }}
-          git push origin ${{ github.ref }}
-          ls -la
-          cat baseline.json
-          
+          git push origin ${{ github.ref }}          
