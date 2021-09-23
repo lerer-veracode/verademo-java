@@ -5,8 +5,8 @@ on:
   # Triggers the workflow on push where package-lock.json modifies or pull request events
   push:
     branches: [test-commit-baseline]
-    #paths:
-    #  - '.github/workflow/**'
+    paths:
+      - '.github/workflows/**'
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
@@ -33,7 +33,8 @@ jobs:
           curl https://downloads.veracode.com/securityscan/pipeline-scan-LATEST.zip -o veracode.zip
           unzip veracode.zip
       - name: Run Pipeline Scanner
-        run: java -jar ./dls/pipeline-scan.jar --veracode_api_id "${{secrets.VERACODE_ID}}" --veracode_api_key "${{secrets.VERACODE_KEY}}" --file "app/target/verademo.war" -jo true -so true
+        run: java -jar ./dls/pipeline-scan.jar --veracode_api_id "${{secrets.VERACODE_ID}}" --veracode_api_key "${{secrets.VERACODE_KEY}}" --file "app/target/verademo.war" -fs "Very High, High, Medium" -jo true -so true --project_url https://www.github.com/$GITHUB_REPOSITORY 
+        continue-on-error: true
       - name: list files
         run: |
           ls -la
