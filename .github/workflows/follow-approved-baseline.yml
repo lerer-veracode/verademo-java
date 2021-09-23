@@ -41,8 +41,8 @@ jobs:
           ls -la
           yes | cp filtered_results.json baseline.json
           ls -la
-          git add ./baseline.json
-          git commit -m \"Updates baseline\"
+          git add "baseline.json"
+          git commit -m "Updates baseline"
           ls -la
           cat baseline.json
           
