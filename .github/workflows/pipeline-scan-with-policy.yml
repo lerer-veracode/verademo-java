@@ -31,7 +31,7 @@ jobs:
           unzip veracode.zip
       - name: Get policy file
         run: | 
-          curl https://github.com/lerer-veracode/policies/blob/main/sec/High.json -o policy.json
+          curl https://raw.githubusercontent.com/lerer-veracode/policies/main/sec/High.json -o policy.json
       - name: Run Pipeline Scanner
         # Baseline should only be created when using filtered results without baseline file as input
         run: |
