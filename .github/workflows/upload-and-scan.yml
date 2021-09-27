@@ -69,6 +69,6 @@ jobs:
               -createprofile true
               -appname ${{ github.repository }}
               -version ${{ github.run_id }}
-              -filepath verademo.war
+              -filepath ./verademo.war
               -sandboxname ${{needs.generate-sandbox-name.outputs.sandbox-name}}
               -createsandbox true
