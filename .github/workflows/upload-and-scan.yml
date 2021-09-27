@@ -51,11 +51,15 @@ jobs:
   SAST-Scan:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
-    requires: [generate-sandbox-name, Build]
+    needs: [generate-sandbox-name, Build]
     # Steps represent a sequence of tasks that will be executed as part of the job
     container: 
       image: veracode/api-wrapper-java:latest
     steps:
+      - name: Get-scan-target
+        uses: actions/download-artifact@v2 # See https://github.com/actions/download-artifact
+        with:
+          name: built-zip
       - name: scan
         continue-on-error: true
         run: |
@@ -66,4 +70,6 @@ jobs:
               -createprofile true
               -appname ${{ github.repository }}
               -version ${{ github.run_id }}
-              -filepath /path/to/built/app.jar
+              -filepath ./app/target/verademo.war
+              -sandboxname ${{needs.generate-sandbox-name.outputs.sandbox-name}}
+              -createsandbox true
