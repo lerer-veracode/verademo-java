@@ -1,8 +1,9 @@
-name: Secure with multiple separate jobs
+name: Upload and Scan using Veracode Docker
 
 # Controls when the workflow will run
 on:
   # Triggers the workflow on push where package-lock.json modifies or pull request events
+  push:
   
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
