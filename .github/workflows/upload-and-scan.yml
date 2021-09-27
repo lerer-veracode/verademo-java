@@ -63,5 +63,5 @@ jobs:
       - name: scan
         continue-on-error: true
         run: |
-          java -jar /opt/veracode/api-wrapper.jar -vid ${{secrets.VERACODE_ID}} -vkey ${{secrets.VERACODE_KEY}} -action UploadAndScan -createprofile true -appname ${{ github.repository }} -version "${{ github.run_id }}" -sandboxname ${{needs.generate-sandbox-name.outputs.sandbox-name}} -createsandbox true -filepath ./verademo.war
+          java -jar /opt/veracode/api-wrapper.jar -vid ${{secrets.VERACODE_ID}} -vkey ${{secrets.VERACODE_KEY}} -action UploadAndScan -createprofile true -appname ${{ github.repository }} -version "${{ github.run_id }}" -sandboxname ${{needs.generate-sandbox-name.outputs.sandbox-name}} -createsandbox true  -scantimeout 30 -filepath ./verademo.war
 
