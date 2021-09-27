@@ -50,6 +50,7 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     container: 
       image: veracode/api-wrapper-java:latest
+      options: --user root
     steps:
       - name: Get-scan-target
         uses: actions/download-artifact@v2 # See https://github.com/actions/download-artifact
