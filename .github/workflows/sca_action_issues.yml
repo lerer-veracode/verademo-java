@@ -4,7 +4,9 @@ name: SCA on change in components
 on: 
   schedule:
     - cron: 15 14 * * 6
-  workflow_dispatch:
+  push:
+    branches:
+      - sca-issues
 
 jobs:
   veracode-sca-task:
@@ -20,6 +22,5 @@ jobs:
         uses: lerer/veracode-sca@v1 
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          url: "https://github.com/Lerer/veracode-pipeline-scan-results-to-sarif"
           create-issues: true 
           fail-on-cvss: 1   
